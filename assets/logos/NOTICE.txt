@@ -1,0 +1,5 @@
+Vendor marks used only to identify whose model a row is. Each is a trademark of its owner:
+  claude.svg  Anthropic (Claude)      openai.svg   OpenAI
+  grok.svg    xAI (Grok)              zhipu.svg    Zhipu AI (GLM)
+  minimax.svg MiniMax                 hunyuan.svg  Tencent (Hunyuan)
+SVG files taken unmodified from the @lobehub/icons-static-svg package (v1.102.0, MIT).
