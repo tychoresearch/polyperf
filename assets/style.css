@@ -219,7 +219,7 @@ th.sortable::after,.lb-head .sortable::after,.trow.thead .sortable::after,.hm-h.
 .meter s::before{left:0} .meter s::after{right:0}
 .ref .meter s{background:var(--text-3)}
 .meter u{position:absolute;top:0;bottom:0;width:0;border-left:1.5px dashed var(--text-3);opacity:.75;text-decoration:none}
-.lb.compact .lb-head,.lb.compact .lb-row{grid-template-columns:30px minmax(0,1fr) 70px minmax(110px,1.15fr) 46px 18px;gap:12px;padding:0 16px}
+.lb.compact .lb-head,.lb.compact .lb-row{grid-template-columns:30px minmax(150px,1.35fr) 64px minmax(100px,1fr) 46px 18px;gap:12px;padding:0 16px}
 .lb.compact .ci{display:none}
 .lb.compact .axis em:not(.hf){display:none}
 @media (min-width:761px){.lb.full .lb-head,.lb.full .lb-row{grid-template-columns:36px minmax(196px,1.4fr) 76px minmax(140px,1.8fr) 100px 48px 56px 66px 104px 18px;gap:12px}}
