@@ -164,7 +164,7 @@
   PP.esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   PP.q=k=>qs.get(k);
   PP.taskUrl=t=>'task.html?id='+encodeURIComponent(t);
-  PP.caseUrl=(t,m,step)=>'case.html?id='+encodeURIComponent(t)+'&sys='+encodeURIComponent(m)+(step?'#s'+step:'');
+  PP.caseUrl=(t)=>PP.taskUrl(t);   // public build: no trajectory pages yet
   PP.CLS={algorithm:['algorithm','算法'],allocation:['allocation','内存分配'],branch:['branch','分支'],'data-structure':['data structure','数据结构'],io:['I/O','I/O'],'jit-unfriendly':['JIT-unfriendly','JIT 不友好'],locking:['locking','锁'],'memory-layout':['memory layout','内存布局'],other:['other','其他'],simd:['SIMD','SIMD'],syscall:['syscall','系统调用']};
   PP.cls=c=>PP.t(...(PP.CLS[c]||[c,c]));
   PP.track=t=>t==='library'?PP.t('library','库'):t==='hardware'?PP.t('hardware-given','给定硬件'):PP.t('application','应用');
