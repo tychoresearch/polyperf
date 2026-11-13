@@ -46,6 +46,8 @@
       $('tid').textContent=id;
       $('pn').innerHTML=(ix>0?`<a href="${PP.taskUrl(T.tasks[ix-1].id)}">‹ ${T.tasks[ix-1].id}</a>`:'')+(ix<T.tasks.length-1?`<a href="${PP.taskUrl(T.tasks[ix+1].id)}">${T.tasks[ix+1].id} ›</a>`:'');
       $('meta').innerHTML=`<span class="chip">${PP.LANG[t.lang]}</span><span class="chip">${PP.track(t.track)}</span><span class="chip accent">${PP.cls(t.cls)}</span><span class="chip">${PP.esc(t.repo)}</span>`;
+      document.getElementById('t3note')?.remove();
+      if(t.track==='hardware')$('meta').insertAdjacentHTML('afterend',`<p id="t3note" class="small muted" style="max-width:52em">${PP.t('This hardware-given task names a target machine in its statement, which the agent saw as written. On this leaderboard it is scored like every other task: against the human fix, timed in the same session on the AMD machine.','这道“给定硬件”题的题面写明了目标机器，智能体看到的就是原文。在本排行榜上它和其他题一样计分：与人类修复比较，在 AMD 机器上同一 session 计时。')}</p>`);
       $('statement').innerHTML=PP.md(D.statement);
       const pass=C.filter(c=>c.status==='pass').length;
       $('glance').innerHTML=`<h3>r = S / S<sub>ref</sub></h3><div class="rchips">${PP.rchips(t,M,lim30,m=>m.name,true)}</div>

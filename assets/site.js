@@ -18,13 +18,13 @@
   };
 
   const PAGES=[['index.html','Overview','概览'],['leaderboard.html','Leaderboard','排行榜'],['tasks.html','Task explorer','题目浏览'],
-               ['analysis.html','Errors & cases','错误与案例'],['method.html','Method','方法与计分'],['preliminary.html','Preliminary','初步结果']];
+               ['analysis.html','Errors & cases','错误与案例'],['method.html','Method','方法与计分']];
   const file=(location.pathname.split('/').pop()||'index.html'), here={'task.html':'tasks.html','case.html':'tasks.html'}[file]||file;
   const hdr=document.createElement('header');hdr.className='nav';
   hdr.innerHTML=`<div class="in"><a class="brand" href="index.html"><img src="assets/logo.svg" alt=""><span><b>PolyPerf</b><small><span class="en">CPU performance benchmark</span><span class="zh">CPU 性能基准</span></small></span></a><nav>${PAGES.map(([h,e,z])=>`<a href="${h}"${h===here?' aria-current="page"':''}><span class="en">${e}</span><span class="zh">${z}</span></a>`).join('')}</nav><div class="tools"><span class="preview-tag">PREVIEW</span><button class="btn" id="langbtn" type="button"><span class="en">中文</span><span class="zh">EN</span></button><button class="btn sq" id="themebtn" type="button" aria-label="toggle light / dark"></button></div></div>`;
   document.body.prepend(hdr);
   const ft=document.createElement('footer');
-  ft.innerHTML=`<div class="in"><span class="brandmini"><img src="assets/logo.svg" alt="">PolyPerf</span><a class="tycho" href="../"><img src="assets/tycho.svg" alt=""><span class="en">A Tycho Research benchmark</span><span class="zh">Tycho Research 出品</span></a><span><span class="en">Preview · numbers from the paper's frozen snapshot (2026-11-07) unless a page says <b>preliminary</b> · paper in preparation</span><span class="zh">预览版 · 除标注<b>初步结果</b>的页面外，数字均来自论文冻结快照（2026-11-07）· 论文准备中</span></span><span><span class="en">Want your model evaluated, or found an error? Contact</span><span class="zh">想评测你的模型，或发现错误？请联系</span> <a href="mailto:tychoresearchai@gmail.com">tychoresearchai@gmail.com</a></span></div>`;
+  ft.innerHTML=`<div class="in"><span class="brandmini"><img src="assets/logo.svg" alt="">PolyPerf</span><a class="tycho" href="../"><img src="assets/tycho.svg" alt=""><span class="en">A Tycho Research benchmark</span><span class="zh">Tycho Research 出品</span></a><span><span class="en">Preview · scored on one AMD EPYC 7B13 machine, snapshot of 2026-11-12 · paper in preparation</span><span class="zh">预览版 · 在一台 AMD EPYC 7B13 机器上计分，快照 2026-11-12 · 论文准备中</span></span><span><span class="en">Want your model evaluated, or found an error? Contact</span><span class="zh">想评测你的模型，或发现错误？请联系</span> <a href="mailto:tychoresearchai@gmail.com">tychoresearchai@gmail.com</a></span></div>`;
   document.body.appendChild(ft);
   const tip=document.createElement('div');tip.className='tip';document.body.appendChild(tip);
 
@@ -118,7 +118,7 @@
   const lbSort={};
   PP.lbRows=function(host,D,o){o=o||{};const max=2200,pc=v=>+Math.min(100,100*v/max).toFixed(2),hf=pc(1000);
     const st=lbSort[host.id], rank=new Map(D.systems.map((x,i)=>[x.id,i+1]));
-    const ref={best:{ref:1,name:PP.t('Best of six (per task)','六系统逐题最优'),score:D.refs.best.score,ci:D.refs.best.ci,capped:D.refs.best.capped,solved:D.refs.best.solved,beyond:D.refs.best.beyond},human:{ref:1,name:PP.t('Human fix','人类修复'),score:1000,capped:100,solved:D.n_tasks},nothing:{ref:1,name:PP.t('Do nothing','什么都不改'),score:D.refs.nothing,capped:0,solved:0,beyond:0}};
+    const ref={best:{ref:1,name:PP.t(`Best of ${D.refs.n_best} (per task)`,`${D.refs.n_best} 个系统逐题最优`),score:D.refs.best.score,ci:D.refs.best.ci,capped:D.refs.best.capped,solved:D.refs.best.solved,beyond:D.refs.best.beyond},human:{ref:1,name:PP.t('Human fix','人类修复'),score:1000,capped:100,solved:D.n_tasks},nothing:{ref:1,name:PP.t('Do nothing','什么都不改'),score:D.refs.nothing,capped:0,solved:0,beyond:0}};
     let rows=[];
     if(!st){   // default: by score, reference points at their place in the ranking
       if(o.refs)rows.push(ref.best);
@@ -131,9 +131,9 @@
     const cur=st||{k:'score',dir:-1}, sa=k=>` class="sortable" data-s="${k}" role="button" tabindex="0" title="${PP.t('Sort by this column','按这一列排序')}" aria-sort="${cur.k===k?(cur.dir>0?'ascending':'descending'):'none'}"`;
     const ci=r=>r.ci?PP.f0(r.ci[0])+'–'+PP.f0(r.ci[1]):'';
     const meter=r=>`<span class="meter"${r.ci?` title="95% CI ${ci(r)}"`:''}><span class="trk"><i style="width:${pc(r.score)}%"></i>${r.ci?`<s style="left:${pc(r.ci[0])}%;width:${+(pc(r.ci[1])-pc(r.ci[0])).toFixed(2)}%"></s>`:''}</span><u style="left:${hf}%"></u></span>`;
-    host.innerHTML=`<div class="lb${o.compact?' compact':''}${o.full?' full':''}"><div class="lb-head"><span>#</span><span${sa('name')}>${PP.t('System','系统')}</span><span${sa('score')}>${PP.t('Score','分数')}</span><span class="axis"><em style="left:0">0</em><em class="hf" style="left:${hf}%">${PP.t('human fix','人类修复')}</em><em style="left:${pc(2000)}%">2,000</em></span><span class="ci">95% CI</span>${o.full?`<span${sa('capped').replace('class="sortable"','class="xtra sortable"')}>0–100</span>`:''}<span${sa('solved').replace('class="sortable"','class="xtra sortable"')}>${PP.t('Solved','解决')}</span>${o.full?`<span${sa('beyond').replace('class="sortable"','class="xtra sortable"')}>${PP.t('Beyond human','超越人类')}</span><span class="xtra">${PP.t('Pass / fail / none','通过/失败/无')}</span>`:''}<span></span></div>`+rows.map(r=>{
+    host.innerHTML=`<div class="lb${o.compact?' compact':''}${o.full?' full':''}"><div class="lb-head"><span>#</span><span${sa('name')}>${PP.t('System','系统')}</span><span${sa('score')}>${PP.t('Score','分数')}</span><span class="axis"><em style="left:0">0</em><em class="hf" style="left:${hf}%">${PP.t('human fix','人类修复')}</em><em style="left:${pc(2000)}%">2,000</em></span><span class="ci">95% CI</span>${o.full?`<span${sa('capped').replace('class="sortable"','class="xtra sortable"')}>0–100</span>`:''}<span${sa('solved').replace('class="sortable"','class="xtra sortable"')}><span title="${PP.t('Tasks where g ≥ 0.95: the patch reaches at least 95% of the human fix log-speedup','g ≥ 0.95 的题数：补丁达到人类修复 log 提速的 95% 及以上')}">${PP.t('Matched human','追平人类')} ⓘ</span></span>${o.full?`<span${sa('beyond').replace('class="sortable"','class="xtra sortable"')}>${PP.t('Beyond human','超越人类')}</span><span class="xtra">${PP.t('Pass / fail / none','通过/失败/无')}</span>`:''}<span></span></div>`+rows.map(r=>{
       if(r.ref)return `<div class="lb-row ref"><span class="rk"></span><span class="who"><span class="nm">${r.name}</span></span><span class="score">${PP.f0(r.score)}</span>${meter(r)}<span class="ci">${ci(r)}</span>${o.full?`<span class="xtra">${r.capped??'–'}</span>`:''}<span class="xtra">${o.full?(r.solved??'–'):''}</span>${o.full?`<span class="xtra">${r.beyond??'–'}</span><span class="xtra">–</span>`:''}<span class="go"></span></div>`;
-      return `<div class="lb-row"><span class="rk">${String(rank.get(r.id)).padStart(2,'0')}</span><span class="who">${PP.av(r.id,r.name)}<span class="nm"><b>${r.name}</b><small>${r.harness}</small></span></span><span class="score">${PP.f0(r.score)}</span>${meter(r)}<span class="ci">${ci(r)}</span>${o.full?`<span class="xtra">${r.capped}</span>`:''}<span class="xtra">${r.solved}/${D.n_tasks}</span>${o.full?`<span class="xtra">${r.beyond}</span><span class="xtra">${r.passing} / ${r.failing} / ${r.no_patch}</span>`:''}<a class="go" href="tasks.html" aria-label="tasks">${ICON.arrow}</a></div>`}).join('')+`</div>`;
+      return `<div class="lb-row"><span class="rk">${String(rank.get(r.id)).padStart(2,'0')}</span><span class="who">${PP.av(r.id,r.name)}<span class="nm"><b title="${r.name}">${o.compact?r.name.replace(/ \(.*\)$/,''):r.name}</b><small>${r.harness}</small></span></span><span class="score">${PP.f0(r.score)}</span>${meter(r)}<span class="ci">${ci(r)}</span>${o.full?`<span class="xtra">${r.capped}</span>`:''}<span class="xtra">${r.solved}/${D.n_tasks}</span>${o.full?`<span class="xtra">${r.beyond}</span><span class="xtra">${r.passing} / ${r.failing} / ${r.no_patch}</span>`:''}<a class="go" href="tasks.html" aria-label="tasks">${ICON.arrow}</a></div>`}).join('')+`</div>`;
     host.onclick=host.onkeydown=e=>{if(e.type==='keydown'&&e.key!=='Enter'&&e.key!==' ')return;const h=e.target.closest('.lb-head [data-s]');if(!h)return;e.preventDefault();
       const k=h.dataset.s,nx=cur.k===k?{k,dir:-cur.dir}:{k,dir:k==='name'?1:-1};
       if(nx.k==='score'&&nx.dir===-1)delete lbSort[host.id];else lbSort[host.id]=nx;
@@ -164,11 +164,11 @@
   PP.esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   PP.q=k=>qs.get(k);
   PP.taskUrl=t=>'task.html?id='+encodeURIComponent(t);
-  PP.caseUrl=(t)=>PP.taskUrl(t);   // public build: no trajectory pages yet
+  PP.caseUrl=(t,m,step)=>'case.html?id='+encodeURIComponent(t)+'&sys='+encodeURIComponent(m)+(step?'#s'+step:'');
   PP.CLS={algorithm:['algorithm','算法'],allocation:['allocation','内存分配'],branch:['branch','分支'],'data-structure':['data structure','数据结构'],io:['I/O','I/O'],'jit-unfriendly':['JIT-unfriendly','JIT 不友好'],locking:['locking','锁'],'memory-layout':['memory layout','内存布局'],other:['other','其他'],simd:['SIMD','SIMD'],syscall:['syscall','系统调用']};
   PP.cls=c=>PP.t(...(PP.CLS[c]||[c,c]));
-  PP.track=t=>t==='library'?PP.t('library','库'):PP.t('application','应用');
-  PP.FTYPE={semantic:['Wrong result','结果错误'],memory:['Memory safety','内存安全'],runtime:['Runtime exception / panic','运行时异常'],build:['Does not build','编译失败']};
+  PP.track=t=>t==='library'?PP.t('library','库'):t==='hardware'?PP.t('hardware-given','给定硬件'):PP.t('application','应用');
+  PP.FTYPE={semantic:['Wrong result','结果错误'],memory:['Memory safety','内存安全'],runtime:['Runtime exception / panic','运行时异常'],build:['Does not build','编译失败'],slowdown:['Slower on fresh input','新输入上变慢']};
   PP.CAUGHT={build:['caught by the build','在构建时拦下'],visible:['caught by the visible tests','被可见测试拦下'],hidden:['caught by the hidden checks','被隐藏检查拦下']};
   PP.why=f=>`<span class="chip accent">${PP.t(...PP.FTYPE[f.type])}</span><span>${PP.t(...PP.CAUGHT[f.caught])}</span><span>${PP.esc(f.evidence)}</span>`+(f.log?`<details><summary>${PP.t('Log of the failing stage','失败阶段的日志')}</summary><pre class="logtail">${PP.esc(f.log)}</pre></details>`:'');
   // a per-workload speedup, coloured by how it compares with the human fix on the same workload

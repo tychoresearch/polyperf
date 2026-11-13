@@ -191,18 +191,19 @@ th.sortable::after,.lb-head .sortable::after,.trow.thead .sortable::after,.hm-h.
 .lb-head .axis em{position:absolute;top:50%;transform:translate(-50%,-50%);font-style:normal;white-space:nowrap}
 .lb-head .axis em:first-child{transform:translate(0,-50%)}
 .lb-head .axis em.hf{color:var(--text-2);font-weight:600}
-.lb-row{min-height:62px;border-bottom:1px solid var(--border);transition:background .15s}
+.lb-row{min-height:54px;border-bottom:1px solid var(--border);transition:background .15s}
 .lb-row:last-child{border-bottom:0}
 .lb-row:not(.ref):hover{background:var(--card-2)}
-.lb-row.ref{min-height:40px;background:var(--bg-raised);color:var(--text-3)}
+.lb-row.ref{min-height:38px;background:var(--bg-raised);color:var(--text-3)}
 .lb-row .rk{font:500 13.5px/1 var(--mono);color:var(--text-3)}
 .lb-row .who{display:flex;gap:11px;align-items:center;min-width:0}
 .lb-row .nm{display:block;min-width:0}
 .lb-row .nm b,.lb-row .nm small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-row .nm b{white-space:normal;overflow:visible;line-height:1.2}
 .lb-row .nm b{font:650 15px/1.25 var(--sans)}
 .lb-row .nm small{font-size:12px;line-height:1.3;color:var(--text-3);margin-top:1px}
 .lb-row.ref .nm{font-size:13.5px;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lb-row .score{font:700 23px/1 var(--display);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.lb-row .score{font:700 21px/1 var(--display);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .lb-row.ref .score{font:600 15px/1 var(--sans);letter-spacing:0}
 .lb-row .ci{font:500 12px/1 var(--mono);color:var(--text-2);white-space:nowrap}
 .lb-row.ref .ci{color:var(--text-3)}
@@ -221,7 +222,7 @@ th.sortable::after,.lb-head .sortable::after,.trow.thead .sortable::after,.hm-h.
 .lb.compact .lb-head,.lb.compact .lb-row{grid-template-columns:30px minmax(0,1fr) 70px minmax(110px,1.15fr) 46px 18px;gap:12px;padding:0 16px}
 .lb.compact .ci{display:none}
 .lb.compact .axis em:not(.hf){display:none}
-@media (min-width:761px){.lb.full .lb-head,.lb.full .lb-row{grid-template-columns:36px minmax(160px,1.3fr) 76px minmax(150px,2fr) 100px 48px 56px 66px 104px 18px;gap:12px}}
+@media (min-width:761px){.lb.full .lb-head,.lb.full .lb-row{grid-template-columns:36px minmax(196px,1.4fr) 76px minmax(140px,1.8fr) 100px 48px 56px 66px 104px 18px;gap:12px}}
 @media (max-width:760px){
   .lb-head{display:none}
   .lb-row,.lb.compact .lb-row{grid-template-columns:30px minmax(0,1fr) auto;grid-template-areas:"rk who score" ". meter meter" ". ci ci";gap:7px 10px;padding:13px 14px;min-height:0}
@@ -251,7 +252,7 @@ th.sortable::after,.lb-head .sortable::after,.trow.thead .sortable::after,.hm-h.
 .code .foot .cnt{margin:0 0 9px} .code .foot .cnt b{font:700 22px/1 var(--display);letter-spacing:-.02em}
 .sys{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
 .sy{display:flex;align-items:center;gap:6px;min-width:0;padding:4px 8px 4px 5px;border-radius:9px;border:1px solid var(--border);background:var(--card-2);font:500 11.5px/1 var(--mono);color:var(--text-2)}
-.sy .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:600 12.5px/1.2 var(--sans);color:var(--text)}
+.sy .nm{flex:1;min-width:0;overflow:hidden;white-space:normal;font:600 12.5px/1.2 var(--sans);color:var(--text)}
 .sy b{font-weight:600}
 a.sy{text-decoration:none} a.sy:hover{border-color:var(--text-3);text-decoration:none}
 a.chip:hover{text-decoration:none;border-color:var(--text-3);color:var(--text)}
@@ -329,7 +330,7 @@ td .who{display:inline-flex;align-items:center;gap:9px}
 .hm-h small{font-size:11px;color:var(--text-3);margin-top:3px}
 .hm-h.hm-corner{align-items:flex-start;font:600 12px/1.2 var(--sans);color:var(--text-3)}
 .hm-l{display:flex;align-items:center;gap:9px;min-width:0;padding-right:10px;font-size:13.5px;font-weight:600;white-space:nowrap}
-.hm-l span:last-child{overflow:hidden;text-overflow:ellipsis}
+.hm-l span:last-child{overflow:hidden;white-space:normal;line-height:1.2}
 .hm-c{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:38px;border-radius:8px;font:500 12.5px/1 var(--mono);cursor:default;transition:box-shadow .12s}
 .hm-c[data-i]:hover{position:relative;z-index:1;box-shadow:0 0 0 2px var(--card),0 0 0 3.5px var(--text-2)}
 .hm-c.na{border:1px dashed var(--border)}
@@ -586,3 +587,15 @@ table.fmat tr:hover td.hf{background:var(--accent-soft)}
    !important because any later `font:` shorthand, at any specificity, would silently switch them back on. */
 :where(pre,code,.mono,.diff,.chip,.eq,.rchip,.hm-c,.sy,.tid,.trow .id,.wchip,.snum,.pm,.logtail,.mdcode,.step),
 :where(pre,code,.mono,.diff,.chip,.eq,.rchip,.hm-c,.sy,.tid,.trow .id,.wchip,.snum,.pm,.logtail,.mdcode,.step) *{font-variant-ligatures:none !important}
+/* homepage compact board: one-line rows */
+@media (min-width:761px){
+.lb.compact .lb-row{min-height:34px}
+.lb.compact .lb-row.ref{min-height:28px}
+.lb.compact .lb-row .nm small{display:none}
+.lb.compact .lb-row .nm b{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb.compact .lb-row .score{font-size:16px}
+.lb.compact .lb-row .who .lg,.lb.compact .lb-row .who img,.lb.compact .lb-row .who svg{width:20px;height:20px}
+.hero-grid{align-items:stretch}
+#casecard{display:flex;flex-direction:column}
+}
+@media (min-width:761px){#casecard .foot{flex:1;display:flex;flex-direction:column}}
